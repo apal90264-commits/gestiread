@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GestiRead | National Level Accessibility EdTech Project</title>
+  <meta name="description" content="GestiRead is an AI-powered accessibility and EdTech platform that bridges communication and literacy gaps for deaf and hard-of-hearing learners through sign-to-speech and interactive document translation." />
+  <meta name="keywords" content="GestiRead, accessibility, edtech, sign language, OCR, AI, deaf education, inclusive learning, sign to speech, document translator" />
+  <meta name="author" content="GestiRead Project Team" />
+
+  <link rel="preconnect" href="[fonts.googleapis.com](https://fonts.googleapis.com)">
+  <link rel="preconnect" href="[fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+  <link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap)" rel="stylesheet">
+     <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0d1830;
+      --card: rgba(255,255,255,0.07);
+      --card-border: rgba(255,255,255,0.14);
+      --text: #eaf2ff;
+      --muted: #a7b7d6;
+      --primary: #58c4ff;
+      --primary-2: #8a7dff;
+      --accent: #00e0b8;
+      --danger: #ff6b7a;
+      --warning: #ffd166;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --maxw: 1200px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(88,196,255,0.14), transparent 28%),
+        radial-gradient(circle at top right, rgba(138,125,255,0.14), transparent 22%),
+        linear-gradient(135deg, #050c17 0%, #081120 50%, #0b1730 100%);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(92%, var(--maxw));
+      margin: 0 auto;
+    }
+
+    .section {
+      padding: 88px 0;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+
+    .section-subtitle {
+      max-width: 800px;
+      color: var(--muted);
+      font-size: 1.02rem;
+      margin-bottom: 40px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: #dce8ff;
+      font-size: 0.92rem;
+      margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    .badge-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      box-shadow: 0 0 14px rgba(0,224,184,0.75);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(7,17,31,0.62);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 78px;
+      gap: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    .logo-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2), var(--accent));
+      box-shadow: 0 10px 30px rgba(88,196,255,0.25);
+      position: relative;
+    }
+
+    .logo-mark::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 10px;
+      background: rgba(7,17,31,0.45);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      transition: 0.25s ease;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 22px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      box-shadow: 0 14px 34px rgba(88,196,255,0.24);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(88,196,255,0.34);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.12);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      padding: 90px 0 70px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 6vw, 5.8rem);
+      line-height: 0.98;
+      font-weight: 900;
+      margin-bottom: 18px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #ffffff, #8fd8ff, #9f96ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.08rem;
+      max-width: 670px;
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 34px;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .stat-card h3 {
+      font-size: 1.7rem;
+      margin-bottom: 6px;
+      color: white;
+    }
+
+    .stat-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .hero-visual {
+      position: relative;
+    }
+
+    .hero-panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(88,196,255,0.26), transparent 68%);
+      top: -50px;
+      right: -70px;
+    }
+
+    .hero-diagram {
+      display: grid;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .diagram-box {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(9,17,33,0.76);
+    }
+
+    .diagram-title {
+      font-size: 0.82rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .diagram-text {
+      color: #dce7ff;
+      font-weight: 600;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--primary);
+      font-weight: 800;
+      flex-wrap: wrap;
+    }
+
+    .grid-3,
+    .grid-2,
+    .grid-4 {
+      display: grid;
+      gap: 22px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(88,196,255,0.36);
+    }
+
+    .card-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, rgba(88,196,255,0.2), rgba(138,125,255,0.2));
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .card h3 {
+      font-size: 1.28rem;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .problem-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .problem-item {
+      padding: 18px 20px;
+      border-left: 4px solid var(--danger);
+      background: rgba(255,255,255,0.05);
+      border-radius: 0 16px 16px 0;
+      color: #dfe9ff;
+    }
+
+    .problem-item strong {
+      color: white;
+    }
+
+    .architecture-wrap {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .arch-steps {
+      display: grid;
+      gap: 16px;
+    }
+
+    .arch-step {
+      display: flex;
+      gap: 16px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .arch-num {
+      min-width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: white;
+    }
+
+    .arch-step h4 {
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+
+    .arch-step p {
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .metric-box {
+      display: grid;
+      gap: 18px;
+      height: 100%;
+    }
+
+    .metric-card {
+      border-radius: 22px;
+      padding: 28px;
+      background: linear-gradient(180deg, rgba(88,196,255,0.12), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow);
+    }
+
+    .metric-card h3 {
+      font-size: 2.6rem;
+      margin-bottom: 6px;
+    }
+
+    .metric-card p {
+      color: var(--muted);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 18px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      vertical-align: top;
+    }
+
+    .comparison-table th {
+      background: rgba(255,255,255,0.06);
+      color: white;
+      font-size: 0.98rem;
+    }
+
+    .comparison-table td {
+      color: var(--muted);
+    }
+
+    .comparison-table tr:hover td {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .good {
+      color: #7effb8;
+      font-weight: 700;
+    }
+
+    .bad {
+      color: #ff9aa5;
+      font-weight: 700;
+    }
+
+    .neutral {
+      color: #ffd98a;
+      font-weight: 700;
+    }
+
+    .roadmap {
+      position: relative;
+      display: grid;
+      gap: 20px;
+    }
+
+    .roadmap-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 20px;
+      align-items: start;
+      padding: 22px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .roadmap-phase {
+      font-weight: 800;
+      color: var(--primary);
+      font-size: 1rem;
+    }
+
+    .roadmap-item h4 {
+      font-size: 1.15rem;
+      margin-bottom: 6px;
+    }
+
+    .roadmap-item p {
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .chip-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #dbe8ff;
+      font-size: 0.88rem;
+    }
+
+    .use-case-card {
+      min-height: 100%;
+    }
+
+    .sdg-grid .card {
+      min-height: 100%;
+    }
+
+    .sdg-tag {
+      color: var(--warning);
+      font-weight: 800;
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .cta {
+      padding-bottom: 100px;
+    }
+
+    .cta-box {
+      border-radius: 30px;
+      padding: 42px;
+      background:
+        radial-gradient(circle at top right, rgba(88,196,255,0.18), transparent 26%),
+        linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .cta-box h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      margin-bottom: 14px;
+    }
+
+    .cta-box p {
+      max-width: 820px;
+      margin: 0 auto 24px;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 30px 0 50px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .small {
+      font-size: 0.92rem;
+    }
+
+    .highlight {
+      color: white;
+      font-weight: 700;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: 0.7s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1024px) {
+      .hero-grid,
+      .architecture-wrap,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-3,
+      .grid-2,
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        flex-direction: column;
+        padding: 14px 0;
+      }
+
+      .nav-links {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero {
+        padding-top: 50px;
+      }
+
+      .section {
+        padding: 68px 0;
+      }
+
+      .roadmap-item {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-box {
+        padding: 28px 20px;
+      }
+
+      .hero h1 {
+        font-size: 2.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <a href="#" class="logo">
+        <span class="logo-mark"></span>
+        <span>GestiRead</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#problem">Problem</a>
+        <a href="#solution">Solution</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#comparison">Comparison</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#impact">Impact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content reveal">
+          <div class="badge">
+            <span class="badge-dot"></span>
+            National Level Mini Project | Accessibility + EdTech + AI
+          </div>
+
+          <h1>
+            Empowering Every <span>Voice, Sign, and Learner</span>
+          </h1>
+
+          <p>
+            GestiRead is a real-time multimodal accessibility platform designed to bridge communication and literacy gaps for deaf and hard-of-hearing learners. By combining sign-to-speech AI, intelligent document translation, OCR, natural language processing, and adaptive learning support, it transforms static educational content into inclusive, interactive learning experiences.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#solution" class="btn btn-primary">Explore Solution</a>
+            <a href="#architecture" class="btn btn-secondary">View Architecture</a>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-card">
+              <h3>98.4%</h3>
+              <p>Gesture recognition accuracy from project benchmark highlights</p>
+            </div>
+            <div class="stat-card">
+              <h3>&lt;120ms</h3>
+              <p>Target end-to-end gesture frame latency for smooth interaction</p>
+            </div>
+            <div class="stat-card">
+              <h3>24/7</h3>
+              <p>Accessible digital support beyond interpreter availability constraints</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal">
+          <div class="hero-panel">
+            <div class="hero-diagram">
+              <div class="diagram-box">
+                <div class="diagram-title">Input Layer</div>
+                <div class="diagram-text">Webcam + Gestures + Facial Expressions + Documents</div>
+              </div>
+
+              <div class="flow">
+                <span>Capture</span>
+                <span>→</span>
+                <span>Recognize</span>
+                <span>→</span>
+                <span>Translate</span>
+                <span>→</span>
+                <span>Speak / Sign / Explain</span>
+              </div>
+
+              <div class="diagram-box">
+                <div class="diagram-title">AI Engine</div>
+                <div class="diagram-text">MediaPipe Holistic + Temporal Sequence Modeling + OCR + NLP + Speech Synthesis</div>
+              </div>
+
+              <div class="diagram-box">
+                <div class="diagram-title">Learning Output</div>
+                <div class="diagram-text">Real-time speech, sign-assisted reading, glossary support, and adaptive practice</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <div class="badge reveal">
+          <span class="badge-dot"></span>
+          Project Overview
+        </div>
+        <h2 class="section-title reveal">What is GestiRead?</h2>
+        <p class="section-subtitle reveal">
+          GestiRead is an inclusive learning platform built for educational accessibility. It aims to reduce the gap between sign language communication and traditional text-heavy learning systems by offering a smarter, faster, and more scalable digital bridge.
+        </p>
+
+        <div class="grid-3">
+          <a href="translator.html" class="card reveal">
+            <div class="card-icon">🤟</div>
+            <h3>translator</h3>
+            <p>
+              Captures continuous hand gestures, facial expressions, and body pose signals through a standard camera, then converts recognized sign patterns into meaningful spoken output in real time.
+            </p>
+          </a>
+        </div>
+
+          <div class="card reveal">
+            <div class="card-icon">📘</div>
+            <h3>Interactive Document Translator</h3>
+            <p>
+              Parses textbooks, PDFs, notes, and exam materials using OCR and language understanding so difficult written content becomes more accessible through sign-linked explanations and simplified interpretation.
+            </p>
+          </div>
+
+          <div class="card reveal">
+            <div class="card-icon">🧠</div>
+            <h3>Adaptive Learning Hub</h3>
+            <p>
+              Supports vocabulary drills, sign practice, concept reinforcement, and multilingual learning workflows to help students improve both communication fluency and academic understanding.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="problem">
+      <div class="container">
+        <div class="badge reveal">
+          <span class="badge-dot"></span>
+          Problem Analysis
+        </div>
+        <h2 class="section-title reveal">The Accessibility Gap in Education</h2>
+        <p class="section-subtitle reveal">
+          Deaf and hard-of-hearing learners face barriers that go beyond hearing loss. The challenge includes classroom communication, self-study, comprehension of written language, interpreter scarcity, and limited access to always-available support systems.
+        </p>
+
+        <div class="grid-2">
+          <div class="card reveal">
+            <h3 style="margin-bottom:18px;">Key Challenges</h3>
+            <div class="problem-list">
+              <div class="problem-item">
+                <strong>Communication isolation:</strong> Many students struggle to participate fully in standard classrooms where spoken instruction dominates.
+              </div>
+              <div class="problem-item">
+                <strong>Interpreter scarcity:</strong> Live sign interpreters are expensive, limited in number, and often unavailable during online learning or self-study.
+              </div>
+              <div class="problem-item">
+                <strong>Text comprehension difficulty:</strong> Sign languages have grammatical structures that differ from written language, which creates literacy and syntax barriers.
+              </div>
+              <div class="problem-item">
+                <strong>Static educational content:</strong> Traditional books, PDFs, and notes rarely provide sign-assisted explanations or dynamic accessibility support.
+              </div>
+            </div>
+          </div>
+
+          <div class="card reveal">
+            <h3 style="margin-bottom:18px;">Why This Matters Nationally</h3>
+            <p style="margin-bottom:14px;">
+              Inclusive education is not only a social responsibility but also a national development priority. A platform like GestiRead supports equal learning opportunity, digital accessibility, and scalable educational support infrastructure.
+            </p>
+            <p style="margin-bottom:14px;">
+              Strong modern web products increasingly emphasize accessibility, mobile-first performance, interactive guidance, and real user experience. GestiRead fits that direction by combining accessibility-first thinking with AI-powered interaction.
+            </p>
+            <p>
+              This makes the project relevant for <span class="highlight">schools, colleges, online education platforms, disability support centers, and workplace learning environments</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="solution">
+      <div class="container">
+        <div class="badge reveal">
+          <span class="badge-dot"></span>
+          Core Solution
+        </div>
+        <h2 class="section-title reveal">Three Pillars of the GestiRead Platform</h2>
+        <p class="section-subtitle reveal">
+          The system is designed as a multimodal stack. Instead of solving just one part of accessibility, it connects communication, reading, and learning reinforcement into one integrated experience.
+        </p>
+
+        <div class="grid-3">
+          <div class="card reveal">
+            <div class="card-icon">🎙️</div>
+            <h3>Real-Time Expression to Voice</h3>
+            <p>
+              Hand landmarks, facial cues, and pose signals are continuously tracked and processed to identify dynamic sign sequences. The recognized output is transformed into voice to help hearing educators and peers understand signed communication.
+            </p>
+          </div>
+
+          <div class="card reveal">
+            <div class="card-icon">🔎</div>
+            <h3>Readable Documents for Sign Learners</h3>
+            <p>
+              OCR extracts printed or digital text, while NLP modules simplify or reinterpret difficult passages into more accessible formats. This reduces dependency on manual explanation for every page of content.
+            </p>
+          </div>
+
+          <div class="card reveal">
+            <div class="card-icon">🌍</div>
+            <h3>Scalable Inclusive Learning</h3>
+            <p>
+              The platform can be used on laptops, webcams, and mobile devices, enabling broader deployment in classrooms, homes, and digital learning systems with lower operational dependency on human intermediaries.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="architecture">
+      <div class="container">
+        <div class="badge reveal">
+          <span class="badge-dot"></span>
+          Technical Architecture
+        </div>
+        <h2 class="section-title reveal">How the System Works</h2>
+        <p class="section-subtitle reveal">
+          The architecture combines computer vision, sequence intelligence, language processing, OCR, and speech synthesis. The goal is low latency, high interpretability, and broad device compatibility.
+        </p>
+
+        <div class="architecture-wrap">
+          <div class="card reveal">
+            <div class="arch-steps">
+              <div class="arch-step">
+                <div class="arch-num">01</div>
+                <div>
+                  <h4>Visual Landmark Capture</h4>
+                  <p>
+                    MediaPipe Holistic extracts a dense set of hand, face, and body landmarks frame by frame to detect gesture geometry, motion direction, and expression-linked meaning.
+                  </p>
+                </div>
+              </div>
+
+              <div class="arch-step">
+                <div class="arch-num">02</div>
+                <div>
+                  <h4>Temporal Gesture Understanding</h4>
+                  <p>
+                    A sequence model such as Bi-LSTM or Transformer analyzes landmark progression over time, because sign meaning depends on motion, order, rhythm, and context rather than a single static pose.
+                  </p>
+                </div>
+              </div>
+
+              <div class="arch-step">
+                <div class="arch-num">03</div>
+                <div>
+                  <h4>Text and Language Mapping</h4>
+                  <p>
+                    The recognized gesture output is aligned to text tokens, while document content is processed through OCR and natural language understanding for translation, glossary generation, and simplified interpretation.
+                  </p>
+                </div>
+              </div>
+
+              <div class="arch-step">
+                <div class="arch-num">04</div>
+                <div>
+                  <h4>Speech and Learning Output</h4>
+                  <p>
+                    Speech synthesis modules can generate natural spoken output, while the learning layer delivers practice feedback, sign-linked explanations, and accessible content support.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-box reveal">
+            <div class="metric-card">
+              <h3>98.4%</h3>
+              <p>Reported gesture recognition benchmark in your project material.</p>
+            </div>
+            <div class="metric-card">
+              <h3>&lt;120ms</h3>
+              <p>Projected low-latency interaction target for real-time usability.</p>
+            </div>
+            <div class="metric-card">
+              <h3>Mobile-Ready</h3>
+              <p>Lightweight deployment vision using optimized models and standard camera hardware.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="comparison">
+      <div class="container">
+        <div class="badge reveal">
+          <span class="badge-dot"></span>
+          Comparative Evaluation
+        </div>
+        <h2 class="section-title reveal">Why GestiRead Stands Out</h2>
+        <p class="section-subtitle reveal">
+          The project is stronger when judges can immediately compare it with existing approaches. This matrix highlights where GestiRead delivers unique value.
+        </p>
+
+        <div class="card reveal" style="padding: 0; overflow: hidden;">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Feature / Capability</th>
+                <th>GestiRead AI Platform</th>
+                <th>Traditional Sign Apps</th>
+                <th>Human Sign Interpreter</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Continuous gestures to speech</td>
+                <td><span class="good">Yes - real-time dynamic recognition</span></td>
+                <td><span class="bad">Limited - often static alphabets or fixed signs</span></td>
+                <td><span class="good">Yes - high contextual quality</span></td>
+              </tr>
+              <tr>
+                <td>Interactive document reading</td>
+                <td><span class="good">Yes - OCR + NLP + sign-linked support</span></td>
+                <td><span class="bad">Rarely supported</span></td>
+                <td><span class="bad">Impractical for full-time document use</span></td>
+              </tr>
+              <tr>
+                <td>24/7 availability</td>
+                <td><span class="good">High - scalable digital access</span></td>
+                <td><span class="neutral">Available, but functionally limited</span></td>
+                <td><span class="bad">Low - depends on human scheduling</span></td>
+              </tr>
+              <tr>
+                <td>Scalability in institutions</td>
+                <td><span class="good">Strong potential</span></td>
+                <td><span class="neutral">Moderate</span></td>
+                <td><span class="bad">Limited by workforce availability</span></td>
+              </tr>
+              <tr>
+                <td>Classroom and self-study use</td>
+                <td><span class="good">Supports both</span></td>
+                <td><span class="neutral">Mostly individual use</span></td>
+                <td><span class="neutral">Better in live sessions only</span></td>
+              </tr>
+              <tr>
+                <td>Hardware requirement</td>
+                <td><span class="good">Camera-enabled mobile or laptop</span></td>
+                <td><span class="good">Mobile-friendly</span></td>
+                <td><span class="bad">In-person or live video dependence</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="roadmap">
+      <div class="container">
+        <div class="badge reveal">
+          <span class="badge-dot"></span>
+          Development Strategy
+        </div>
+        <h2 class="section-title reveal">Roadmap from Prototype to National Deployment</h2>
+        <p class="section-subtitle reveal">
+          A good national-level project page should show future direction clearly. This roadmap demonstrates that GestiRead is not only innovative, but also implementable in stages.
+        </p>
+
+        <div class="roadmap">
+          <div class="roadmap-item reveal">
+            <div class="roadmap-phase">Phase 1</div>
+            <div>
+              <h4>Dataset Building and AI Model Training</h4>
+              <p>
+                Build a robust dataset of ISL, ASL, and gesture variations; train and fine-tune landmark-based recognition models for high accuracy across classroom use cases.
+              </p>
+              <div class="chip-group">
+                <span class="chip">MediaPipe Holistic</span>
+                <span class="chip">Bi-LSTM / Transformer</span>
+                <span class="chip">Gesture Corpus</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="roadmap-item reveal">
+            <div class="roadmap-phase">Phase 2</div>
+            <div>
+              <h4>Document OCR and Text-to-Sign Mapping</h4>
+              <p>
+                Integrate document reading and parsing pipelines so textbooks, notes, and exam sheets can be converted into learner-friendly sign-assisted content.
+              </p>
+              <div class="chip-group">
+                <span class="chip">Tesseract OCR</span>
+                <span class="chip">NLP Pipeline</span>
+                <span class="chip">Glossary Mapping</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="roadmap-item reveal">
+            <div class="roadmap-phase">Phase 3</div>
+            <div>
+              <h4>Pilot Testing in Educational Institutions</h4>
+              <p>
+                Deploy the prototype in special schools and inclusive learning environments to gather usability feedback, validate real-world accuracy, and improve learner experience.
+              </p>
+              <div class="chip-group">
+                <span class="chip">User Testing</span>
+                <span class="chip">Accessibility Validation</span>
+                <span class="chip">Avatar / UI Refinement</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="roadmap-item reveal">
+            <div class="roadmap-phase">Phase 4</div>
+            <div>
+              <h4>Platform Expansion and National Reach</h4>
+              <p>
+                Launch a web portal, browser-based interface, and mobile-ready experience for larger-scale educational deployment across institutions and remote learning ecosystems.
+              </p>
+              <div class="chip-group">
+                <span class="chip">Web Platform</span>
+                <span class="chip">Mobile Support</span>
+                <span class="chip">Institutional Partnerships</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="impact">
+      <div class="container">
+        <div class="badge reveal">
+          <span class="badge-dot"></span>
+          Application & Impact
+        </div>
+        <h2 class="section-title reveal">Where GestiRead Can Create Real Change</h2>
+        <p class="section-subtitle reveal">
+          The project has relevance across academic, digital, and professional settings, which increases its value during evaluation and presentation.
+        </p>
+
+        <div class="grid-3">
+          <div class="card use-case-card reveal">
+            <div class="card-icon">🏫</div>
+            <h3>Inclusive Classrooms</h3>
+            <p>
+              Helps deaf learners participate more actively in mainstream classroom environments by reducing communication friction between students and educators.
+            </p>
+          </div>
+
+          <div class="card use-case-card reveal">
+            <div class="card-icon">💻</div>
+            <h3>Remote E-Learning</h3>
+            <p>
+              Integrates naturally into webcam-driven online classes, recorded lessons, tutoring sessions, and self-paced digital study models.
+            </p>
+          </div>
+
+          <div class="card use-case-card reveal">
+            <div class="card-icon">🏢</div>
+            <h3>Workplace Inclusion</h3>
+            <p>
+              Supports presentations, onboarding, meetings, and document interaction in more inclusive professional environments beyond formal education.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="badge reveal">
+          <span class="badge-dot"></span>
+          Alignment with Sustainable Development Goals
+        </div>
+        <h2 class="section-title reveal">Built for Inclusion, Innovation, and Equal Opportunity</h2>
+        <p class="section-subtitle reveal">
+          GestiRead aligns strongly with national and global educational priorities by addressing inclusion through practical technology rather than theoretical intent alone.
+        </p>
+
+        <div class="grid-3 sdg-grid">
+          <div class="card reveal">
+            <span class="sdg-tag">SDG 4</span>
+            <h3>Quality Education</h3>
+            <p>
+              Supports equitable learning access by making documents, classroom interaction, and digital study material easier to understand for deaf and hard-of-hearing learners.
+            </p>
+          </div>
+
+          <div class="card reveal">
+            <span class="sdg-tag">SDG 10</span>
+            <h3>Reduced Inequalities</h3>
+            <p>
+              Reduces dependence on scarce and costly human support systems by providing scalable accessibility tools that improve participation and autonomy.
+            </p>
+          </div>
+
+          <div class="card reveal">
+            <span class="sdg-tag">SDG 9</span>
+            <h3>Industry, Innovation and Infrastructure</h3>
+            <p>
+              Demonstrates how AI, OCR, NLP, and assistive computing can be integrated into meaningful public-interest technology for inclusive digital infrastructure.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta">
+      <div class="container">
+        <div class="cta-box reveal">
+          <h2>Empowering Every Voice and Sign</h2>
+          <p>
+            GestiRead is more than a project idea. It is a scalable accessibility framework for inclusive learning, real-time communication, and technology-driven educational support. Designed for social impact and technical excellence, it presents a strong vision for the future of accessible education in India.
+          </p>
+          <div class="hero-actions" style="justify-content:center; margin-bottom:0;">
+            <a href="#about" class="btn btn-primary">Back to Top</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="small">
+        <span class="highlight">GestiRead</span> | National Level Accessibility EdTech Project
+      </div>
+      <div class="small">
+        Department of Computer Science & Engineering | ABES Institute of Technology, Ghaziabad
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, {
+      threshold: 0.12
+    });
+
+    reveals.forEach(item => observer.observe(item));
+    
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

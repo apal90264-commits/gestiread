@@ -1,0 +1,1946 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GESTIREAD AI Translator</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+
+    <script src="js/translator.js"></script>
+
+
+
+    <style>
+        /* ==========================================
+   GESTIREAD - translator.css
+   Phase 1
+========================================== */
+
+        :root {
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --cyan: #22d3ee;
+            --dark: #050816;
+            --card: #0f172a;
+            --card2: #111827;
+            --border: rgba(255, 255, 255, .08);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --shadow: 0 20px 45px rgba(0, 0, 0, .35);
+        }
+
+        body {
+
+            background:
+                radial-gradient(circle at top left, #1d4ed855, transparent 45%),
+                radial-gradient(circle at bottom right, #7c3aed55, transparent 45%),
+                var(--dark);
+
+            color: var(--text);
+
+            min-height: 100vh;
+
+            overflow-x: hidden;
+
+        }
+
+        /* =====================================
+   NAVBAR
+===================================== */
+
+        .navbar {
+
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            height: 80px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 0 60px;
+
+            background: rgba(10, 15, 30, .75);
+
+            backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+
+            z-index: 999;
+
+        }
+
+        .logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-decoration: none;
+
+            color: #fff;
+
+            font-size: 28px;
+
+            font-weight: 700;
+
+        }
+
+        .logo i {
+
+            color: #38bdf8;
+
+            font-size: 34px;
+
+        }
+
+        .nav-links {
+
+            display: flex;
+
+            gap: 35px;
+
+            list-style: none;
+
+        }
+
+        .nav-links a {
+
+            text-decoration: none;
+
+            color: #cbd5e1;
+
+            font-size: 16px;
+
+            font-weight: 500;
+
+            transition: .3s;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+        }
+
+        .nav-links a:hover {
+
+            color: #38bdf8;
+
+        }
+
+        .nav-links a.active {
+
+            color: #38bdf8;
+
+        }
+
+        .nav-actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+        }
+
+        .theme-btn {
+
+            width: 45px;
+
+            height: 45px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            cursor: pointer;
+
+            color: white;
+
+            background: #1e293b;
+
+            transition: .3s;
+
+        }
+
+        .theme-btn:hover {
+
+            background: #2563eb;
+
+        }
+
+        .launch-btn {
+
+            text-decoration: none;
+
+            padding: 13px 28px;
+
+            border-radius: 50px;
+
+            color: white;
+
+            font-weight: 600;
+
+            background: linear-gradient(135deg, #2563eb, #8b5cf6);
+
+            transition: .3s;
+
+        }
+
+        .dataset-card {
+
+            background: rgba(15, 23, 42, .75);
+
+            backdrop-filter: blur(18px);
+
+            border-radius: 25px;
+
+            padding: 25px;
+
+            margin-top: 25px;
+
+            border: 1px solid rgba(255, 255, 255, .08);
+
+        }
+
+        .dataset-card select {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin: 15px 0;
+
+            border-radius: 12px;
+
+            background: #020617;
+
+            color: white;
+
+            border: none;
+
+        }
+
+        .progress {
+
+            height: 12px;
+
+            background: #1e293b;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            margin: 20px 0;
+
+        }
+
+        .progress div {
+
+            height: 100%;
+
+            width: 0%;
+
+            background: linear-gradient(90deg, #3b82f6, #22d3ee);
+
+        }
+
+        .launch-btn:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow: 0 15px 25px rgba(59, 130, 246, .35);
+
+        }
+
+        @media(max-width:900px) {
+
+            .nav-links {
+
+                display: none;
+
+            }
+
+            .navbar {
+
+                padding: 0 25px;
+
+            }
+
+        }
+
+        .camera-preview {
+
+            position: relative;
+
+            overflow: hidden;
+
+        }
+
+        #video {
+
+            position: absolute;
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+        }
+
+        #outputCanvas {
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            pointer-events: none;
+
+            z-index: 2;
+
+        }
+
+        /* ==========================================
+Translator Section
+========================================== */
+
+        .translator {
+
+            max-width: 1450px;
+
+            margin: auto;
+
+            padding: 110px 40px 70px;
+
+        }
+
+        /* ==========================================
+Header
+========================================== */
+
+        .translator-header {
+
+            text-align: center;
+
+            margin-bottom: 60px;
+
+        }
+
+        .translator-header h1 {
+
+            font-size: 52px;
+
+            font-weight: 800;
+
+            margin-bottom: 15px;
+
+            background: linear-gradient(90deg, #60a5fa, #22d3ee, #8b5cf6);
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+        }
+
+        .translator-header p {
+
+            color: var(--muted);
+
+            font-size: 18px;
+
+            max-width: 750px;
+
+            margin: auto;
+
+            line-height: 32px;
+
+        }
+
+        /* ==========================================
+Workspace
+========================================== */
+
+        .workspace {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 35px;
+
+        }
+
+        /* ==========================================
+Panels
+========================================== */
+
+        .left-panel,
+        .right-panel {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 30px;
+
+        }
+
+        /* ==========================================
+Cards
+========================================== */
+
+        .camera-card,
+        .upload-card,
+        .translation-card {
+
+            background: rgba(15, 23, 42, .75);
+
+            backdrop-filter: blur(18px);
+
+            border: 1px solid var(--border);
+
+            border-radius: 28px;
+
+            padding: 28px;
+
+            box-shadow: var(--shadow);
+
+            transition: .35s;
+
+        }
+
+        .camera-card:hover,
+        .upload-card:hover,
+        .translation-card:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        .camera-card h2,
+        .upload-card h2,
+        .translation-card h2 {
+
+            margin-bottom: 20px;
+
+            font-size: 28px;
+
+        }
+
+        /* ==========================================
+Camera
+========================================== */
+
+        .camera-preview {
+
+            height: 430px;
+
+            border-radius: 22px;
+
+            background: #020617;
+
+            border: 1px solid rgba(255, 255, 255, .05);
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            position: relative;
+
+            overflow: hidden;
+
+        }
+
+        #cameraPlaceholder {
+
+            text-align: center;
+
+            color: var(--muted);
+
+        }
+
+        #cameraPlaceholder i {
+
+            color: #38bdf8;
+
+            margin-bottom: 20px;
+
+        }
+
+        video {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: none;
+
+        }
+
+        /* ==========================================
+Buttons
+========================================== */
+
+        .camera-buttons,
+        .output-buttons {
+
+            display: flex;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            margin-top: 25px;
+
+        }
+
+        .camera-buttons button,
+        .output-buttons button {
+
+            flex: 1;
+
+            min-width: 150px;
+
+            border: none;
+
+            border-radius: 50px;
+
+            padding: 15px;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            color: white;
+
+            background: linear-gradient(135deg, #2563eb, #8b5cf6);
+
+            transition: .35s;
+
+        }
+
+        .camera-buttons button:hover,
+        .output-buttons button:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow: 0 15px 30px rgba(59, 130, 246, .35);
+
+        }
+
+        /* ==========================================
+Upload
+========================================== */
+
+        .upload-box {
+
+            height: 280px;
+
+            border: 2px dashed rgba(255, 255, 255, .15);
+
+            border-radius: 22px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            cursor: pointer;
+
+            transition: .35s;
+
+            color: var(--muted);
+
+        }
+
+        .upload-box:hover {
+
+            border-color: #38bdf8;
+
+            background: rgba(59, 130, 246, .08);
+
+        }
+
+        .upload-box i {
+
+            color: #38bdf8;
+
+            margin-bottom: 20px;
+
+        }
+
+        .upload-box h3 {
+
+            color: white;
+
+            margin-bottom: 10px;
+
+        }
+
+        /* ==========================================
+Textarea
+========================================== */
+
+        textarea {
+
+            width: 100%;
+
+            height: 260px;
+
+            border: none;
+
+            outline: none;
+
+            resize: none;
+
+            border-radius: 20px;
+
+            padding: 20px;
+
+            background: #020617;
+
+            color: white;
+
+            font-size: 16px;
+
+            line-height: 30px;
+
+        }
+
+        /* ==========================================
+Status Grid
+========================================== */
+
+        .status-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 20px;
+
+        }
+
+        .status-card {
+
+            background: rgba(15, 23, 42, .75);
+
+            border: 1px solid var(--border);
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            transition: .35s;
+
+        }
+
+        .status-card:hover {
+
+            transform: translateY(-6px);
+
+        }
+
+        .status-card h3 {
+
+            margin-bottom: 12px;
+
+            font-size: 18px;
+
+        }
+
+        .status-card span {
+
+            display: inline-block;
+
+            padding: 8px 18px;
+
+            border-radius: 30px;
+
+            background: #22c55e22;
+
+            color: #22c55e;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+        }
+
+        /* ==========================================
+Scrollbar
+========================================== */
+
+        textarea::-webkit-scrollbar {
+
+            width: 8px;
+
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+
+            background: #02122c;
+
+            border-radius: 20px;
+
+        }
+
+        /* ==========================================
+Responsive
+========================================== */
+
+        @media(max-width:1100px) {
+
+            .workspace {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        @media(max-width:768px) {
+
+            .translator {
+
+                padding: 90px 20px 40px;
+
+            }
+
+            .translator-header h1 {
+
+                font-size: 38px;
+
+            }
+
+            .camera-preview {
+
+                height: 300px;
+
+            }
+
+            .status-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .camera-buttons button,
+            .output-buttons button {
+
+                min-width: 100%;
+
+            }
+        }
+    </style>
+
+
+    <style id="live-ui">
+        .live-bar { margin-top: 16px; padding: 16px 18px; border-radius: 18px; background: rgba(15, 23, 42, .75);
+                    border: 1px solid rgba(56, 189, 248, .35); }
+        .live-bar .live-title { font-size: 13px; letter-spacing: .6px; text-transform: uppercase; opacity: .7; margin-bottom: 6px; }
+        #liveSign { display: block; font-size: 30px; font-weight: 800; min-height: 40px; color: #38bdf8; }
+        .live-toggles { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 10px; font-size: 14px; }
+        .live-toggles label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .live-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+        #showSigns, #micSign, #clearText, #replaySigns, #addSign, #trainModel, #resetModel, #recClip, #speakLive, #clearLive {
+            border: none; border-radius: 50px; padding: 11px 20px; cursor: pointer; font-size: 15px; font-weight: 600;
+            color: #fff; background: linear-gradient(135deg, #2563eb, #8b5cf6); transition: .3s;
+        }
+        #showSigns:hover, #micSign:hover, #clearText:hover, #replaySigns:hover, #addSign:hover, #trainModel:hover, #resetModel:hover, #recClip:hover, #speakLive:hover, #clearLive:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(59, 130, 246, .35); }
+        #newSignName, #clipWord { min-width: 200px; }
+        #liveOverlay { position: absolute; left: 0; right: 0; bottom: 16px; text-align: center; font-size: 38px; font-weight: 800;
+                       color: #fff; text-shadow: 0 2px 12px rgba(0, 0, 0, .9); pointer-events: none; z-index: 5; opacity: 0; transition: opacity .25s; }
+        #liveOverlay.show { opacity: 1; }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-hands"></i>
+                <span>GESTIREAD</span>
+            </a>
+
+            <!-- Navigation -->
+            <ul class="nav-links">
+
+                <li>
+                    <a href="index.html" class="active">
+                        <i class="fa-solid fa-house"></i>
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="translator.html">
+                        <i class="fa-solid fa-language"></i>
+                        Translator
+                    </a>
+                </li>
+
+                <li>
+                    <a href="learning.html">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        Learning Hub
+                    </a>
+                </li>
+
+                <li>
+                    <a href="about.html">
+                        <i class="fa-solid fa-circle-info"></i>
+                        About
+                    </a>
+                </li>
+
+                <li>
+                    <a href="contact.html">
+                        <i class="fa-solid fa-envelope"></i>
+                        Contact
+                    </a>
+                </li>
+
+            </ul>
+
+            <!-- Right Buttons -->
+            <div class="nav-actions">
+
+                <button class="theme-btn">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+
+                <a href="translator.html" class="launch-btn">
+                    <i class="fa-solid fa-rocket"></i>
+                    Launch AI
+                </a>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+    <section class="translator">
+
+        <div class="translator-header">
+
+            <h1>
+                AI Sign Language Translator
+            </h1>
+
+            <p>
+                Real-time Gesture Recognition • OCR • Speech Synthesis • AI Translation
+            </p>
+
+        </div>
+
+        <div class="workspace">
+
+            <div class="left-panel">
+
+                <div class="camera-card">
+
+                    <h2> Live Camera </h2>
+
+                    <div class="camera-preview">
+
+                        <video id="video" autoplay playsinline>
+                        </video>
+
+                        <canvas id="outputCanvas"></canvas>
+
+                        <div id="liveOverlay"></div>
+                        <div id="cameraPlaceholder">
+
+                            <i class="fa-solid fa-camera fa-4x"></i>
+
+                            <h3>Camera Ready</h3>
+
+                            <p>Press Start Camera</p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="camera-buttons">
+
+                    <button id="startCamera">
+                        Start Camera
+                    </button>
+
+                    <button id="stopCamera">
+                        Stop Camera
+                    </button>
+
+                    <button>
+                        Capture
+                    </button>
+
+                </div>
+
+                    <div class="live-bar">
+                        <div class="live-title">Live hand sign &rarr; text &amp; speech</div>
+                        <b id="liveSign">Press Start Camera, then show a hand sign</b>
+                        <div class="live-toggles">
+                            <label><input type="checkbox" id="liveRecog" checked> Recognise live</label>
+                            <label><input type="checkbox" id="autoSpeak" checked> Speak aloud</label>
+                            <label><input type="checkbox" id="starterGestures" checked> Starter gestures</label>
+                        </div>
+                        <div class="live-actions">
+                            <button id="speakLive" type="button">&#128266; Speak the text</button>
+                            <button id="clearLive" type="button">Clear text</button>
+                        </div>
+                    </div>
+
+                    <video id="video" autoplay playsinline></video>
+
+                </div>
+                <div class="dataset-card">
+
+                    <h2>🖐 Dataset Collector</h2>
+
+                    <label>Select Gesture</label>
+
+                    <select id="gestureLabel">
+
+                        <option>Hello</option>
+
+                        <option>Thank You</option>
+
+                        <option>Yes</option>
+
+                        <option>No</option>
+
+                        <option>Help</option>
+
+                    </select>
+
+                    <h3>
+
+                        Samples
+
+                        <span id="sampleCount">
+
+                            0
+
+                        </span>
+
+                        /500
+
+                    </h3>
+
+                    <div class="progress">
+
+                        <div id="progressBar"></div>
+
+                    </div>
+
+                    <div class="camera-buttons">
+
+                        <button id="startCollection">
+
+                            Start Recording
+
+                        </button>
+
+                        <button id="stopCollection">
+
+                            Stop
+
+                        </button>
+
+                        <button id="downloadDataset">
+
+                            Download JSON
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+            <div class="status-grid">
+
+                <div class="status-card">
+
+                    <h3>Camera</h3>
+
+                    <span class="online">
+                        ONLINE
+                    </span>
+
+                </div>
+
+                <div class="status-card">
+
+                    <h3>OCR</h3>
+
+                    <span>
+                        READY
+                    </span>
+
+                </div>
+
+                <div class="status-card">
+
+                    <h3>Speech</h3>
+
+                    <span>
+                        ACTIVE
+                    </span>
+
+                </div>
+
+                <div class="status-card">
+
+                    <h3>AI Model</h3>
+
+                    <span>
+                        LOADED
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="right-panel">
+
+            <div class="upload-card">
+
+                <h2>
+
+                    📄 Upload Document
+
+                </h2>
+
+                <label class="upload-box">
+
+                    <i class="fa-solid fa-cloud-arrow-up fa-4x"></i>
+
+                    <h3>
+
+                        Drag & Drop
+
+                    </h3>
+
+                    <p>
+
+                        PDF • JPG • PNG
+
+                    </p>
+
+                    <input type="file" hidden id="fileUpload">
+
+                </label>
+
+            </div>
+
+            <div class="translation-card">
+
+                <h2>
+
+                    🤖 AI Translation
+
+                </h2>
+
+                <textarea id="translation" placeholder="Translation appears here...">
+</textarea>
+
+                <div id="translationStatus" style="margin-top:10px;font-size:14px;opacity:.85;"></div>
+
+                <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+                    <button id="showSigns" type="button">Show signs (text &rarr; ISL)</button>
+                    <button id="micSign" type="button">&#127908; Speak to sign</button>
+                    <button id="clearText" type="button">Clear</button>
+                </div>
+
+                <div id="glossLine" style="margin-top:10px;font-weight:600;letter-spacing:.5px;"></div>
+
+                <div id="signPlayer" style="display:none;margin-top:14px;text-align:center;">
+                    <video id="signVideo" playsinline muted style="display:none;max-height:240px;max-width:100%;border-radius:12px;"></video>
+                    <img id="signImg" alt="sign" style="display:none;max-height:180px;border-radius:12px;">
+                    <div id="signCaption" style="margin-top:6px;font-size:14px;opacity:.85;"></div>
+                    <button id="replaySigns" type="button" style="margin-top:8px;">Replay signs</button>
+                </div>
+
+                <div id="gestureTools" style="margin-top:18px;padding:14px;border:1px solid rgba(255,255,255,.18);border-radius:14px;">
+                    <h3 style="margin:0 0 8px;">&#129311; Sign &rarr; Text / Speech</h3>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                        <input id="newSignName" placeholder="New sign name, e.g. water" style="padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.25);background:rgba(127,127,127,.15);color:inherit;">
+                        <button id="addSign" type="button">Add sign</button>
+                        <button id="trainModel" type="button">Train model</button>
+                        <button id="resetModel" type="button">Reset</button>
+                    </div>
+                    <div id="modelStatus" style="margin-top:8px;font-size:14px;opacity:.9;"></div>
+                    <div style="margin-top:6px;font-size:12px;opacity:.7;">Teach it: Start Camera &rarr; type a name &rarr; Add sign &rarr; Start Recording (left) and hold the sign steady ~4 s &rarr; repeat for each sign &rarr; Train model &rarr; tick "Recognise signs live".</div>
+                </div>
+
+                <div id="clipTools" style="margin-top:14px;padding:14px;border:1px solid rgba(255,255,255,.18);border-radius:14px;">
+                    <h3 style="margin:0 0 8px;">&#127916; ISL clip library</h3>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                        <input id="clipWord" placeholder="Word, e.g. market" style="padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.25);background:rgba(127,127,127,.15);color:inherit;">
+                        <button id="recClip" type="button">&#9210; Record clip</button>
+                    </div>
+                    <div id="libStatus" style="margin-top:8px;font-size:14px;opacity:.9;"></div>
+                    <div style="margin-top:6px;font-size:12px;opacity:.7;">Start the camera, type the word, press Record, perform the ISL sign, press Stop. Words without a clip are shown as placeholder letters.</div>
+                </div>
+
+                <div class="output-buttons">
+
+                    <button id="speak">
+                        Speak
+                    </button>
+
+                    <button>
+                        Copy
+                    </button>
+
+                    <button>
+                        Download
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        </div>
+
+    </section>
+
+    <script src="js/app.js"></script>
+
+    <script>
+
+        const video = document.getElementById("video");
+
+        const start = document.getElementById("startCamera");
+
+        const stop = document.getElementById("stopCamera");
+
+        const placeholder = document.getElementById("cameraPlaceholder");
+
+        let stream;
+
+        start.onclick = async () => {
+
+            try {
+
+                stream = await navigator.mediaDevices.getUserMedia({
+
+                    video: true
+
+                });
+
+                video.srcObject = stream;
+
+                video.style.display = "block";
+
+                placeholder.style.display = "none";
+
+            } catch (e) {
+
+                alert("Unable to access camera.");
+
+            }
+
+        };
+
+        stop.onclick = () => {
+
+            if (stream) {
+
+                stream.getTracks().forEach(track => track.stop());
+
+                video.style.display = "none";
+
+                placeholder.style.display = "block";
+
+            }
+
+        };
+
+        document.getElementById("speak").onclick = () => {
+
+            const text = document.getElementById("translation").value;
+
+            if (!text) return;
+
+            speechSynthesis.cancel();
+
+            const speech = new SpeechSynthesisUtterance(text);
+
+            speech.rate = 1;
+
+            speech.pitch = 1;
+
+            speechSynthesis.speak(speech);
+
+        };
+
+                /*
+        ===========================================
+        GESTIREAD
+        translator.js
+        Section 1 : Camera Initialization
+        ===========================================
+        */
+
+        class CameraManager {
+
+            constructor() {
+
+                this.video = document.getElementById("video");
+
+                this.startButton = document.getElementById("startCamera");
+
+                this.stopButton = document.getElementById("stopCamera");
+
+                this.placeholder = document.getElementById("cameraPlaceholder");
+
+                this.stream = null;
+
+                this.isRunning = false;
+
+                this.initialize();
+
+            }
+
+            initialize() {
+
+                if (this.startButton) {
+
+                    this.startButton.addEventListener(
+                        "click",
+                        () => this.startCamera()
+                    );
+
+                }
+
+                if (this.stopButton) {
+
+                    this.stopButton.addEventListener(
+                        "click",
+                        () => this.stopCamera()
+                    );
+
+                }
+
+            }
+
+            async startCamera() {
+
+                if (this.isRunning) return;
+
+                try {
+
+                    this.stream =
+                        await navigator.mediaDevices.getUserMedia({
+
+                            video: {
+
+                                width: 1280,
+                                height: 720,
+                                facingMode: "user"
+
+                            },
+
+                            audio: false
+
+                        });
+
+                    this.video.srcObject = this.stream;
+
+                    await this.video.play();
+                    const canvas = document.getElementById("outputCanvas");
+
+                    this.tracker = new HandTracker(this.video, canvas);
+
+                    await this.tracker.initialize();
+
+                    const mpCamera = new Camera(this.video, {
+
+                        onFrame: async () => {
+
+                            await this.tracker.hands.send({
+                                image: this.video
+                            });
+
+                        },
+
+                        width: 1280,
+
+                        height: 720
+
+                    });
+
+                    mpCamera.start();
+
+                    this.video.style.display = "block";
+
+                    if (this.placeholder) {
+
+                        this.placeholder.style.display = "none";
+
+                    }
+
+                    this.isRunning = true;
+
+                    console.log("Camera Started");
+
+
+                }
+
+
+                catch (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Camera permission denied or webcam unavailable."
+                    );
+
+                }
+
+            }
+
+            stopCamera() {
+
+                if (!this.stream) return;
+
+                this.stream.getTracks().forEach(track => {
+
+                    track.stop();
+
+                });
+
+                this.video.srcObject = null;
+
+                this.video.style.display = "none";
+
+                if (this.placeholder) {
+
+                    this.placeholder.style.display = "flex";
+
+                }
+
+                this.isRunning = false;
+
+                console.log("Camera Stopped");
+
+            }
+
+            getVideoElement() {
+
+                return this.video;
+
+            }
+
+            isCameraRunning() {
+
+                return this.isRunning;
+
+            }
+
+        }
+        class DatasetCollector {
+
+            constructor() {
+
+                this.samples = [];
+
+                this.recording = false;
+
+                this.sampleCount = 0;
+
+            }
+
+            start() {
+
+                this.samples = [];
+
+                this.recording = true;
+
+                this.sampleCount = 0;
+
+            }
+
+            stop() {
+
+                this.recording = false;
+
+            }
+
+            addSample(features, label) {
+
+                if (!this.recording) return;
+
+                this.samples.push({
+
+                    label: label,
+
+                    features: features
+
+                });
+
+                this.sampleCount++;
+
+                document.getElementById("sampleCount").innerHTML = this.sampleCount;
+
+                document.getElementById("progressBar").style.width = (this.sampleCount / 500) * 100 + "%";
+
+            }
+
+        }
+        class HandTracker {
+
+            constructor(video, canvas) {
+
+                this.video = video;
+
+                this.canvas = canvas;
+
+                this.ctx = canvas.getContext("2d");
+
+                this.hands = null;
+
+            }
+
+            async initialize() {
+
+                this.hands = new Hands({
+
+                    locateFile: (file) =>
+
+                        `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+
+                });
+
+                this.hands.setOptions({
+
+                    maxNumHands: 2,
+
+                    modelComplexity: 1,
+
+                    minDetectionConfidence: 0.7,
+
+                    minTrackingConfidence: 0.7
+
+                });
+
+                this.hands.onResults((results) => {
+
+                    this.draw(results);
+
+                    // Check if at least one hand is detected
+                    if (results.multiHandLandmarks &&
+                        results.multiHandLandmarks.length > 0) {
+
+                        // First detected hand
+                        const landmarks = results.multiHandLandmarks[0];
+
+                        // Convert landmarks into feature array
+                        const features = [];
+
+                        landmarks.forEach(point => {
+
+                            features.push(point.x);
+                            features.push(point.y);
+                            features.push(point.z);
+
+                        });
+
+                        console.log(features);
+                        collector.addSample(
+
+                            features,
+
+                            document.getElementById("gestureLabel").value
+
+                        );
+
+                    }
+
+                });
+
+
+            }
+
+            draw(results) {
+
+                this.canvas.width = this.video.videoWidth;
+
+                this.canvas.height = this.video.videoHeight;
+
+                this.ctx.clearRect(
+                    0,
+                    0,
+                    this.canvas.width,
+                    this.canvas.height
+                );
+
+                this.ctx.drawImage(
+                    results.image,
+                    0,
+                    0,
+                    this.canvas.width,
+                    this.canvas.height
+                );
+
+                if (results.multiHandLandmarks) {
+
+                    for (const landmarks of results.multiHandLandmarks) {
+
+                        drawConnectors(
+
+                            this.ctx,
+
+                            landmarks,
+
+                            HAND_CONNECTIONS,
+
+                            {
+
+                                color: "#00FF88",
+
+                                lineWidth: 4
+
+                            }
+
+                        );
+
+                        drawLandmarks(
+
+                            this.ctx,
+
+                            landmarks,
+
+                            {
+
+                                color: "#00BFFF",
+
+                                radius: 5
+
+                            }
+
+                        );
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        /*
+        ===========================================
+        Initialize Camera
+        ===========================================
+        */
+
+        let camera = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            camera = new CameraManager();
+
+        });
+    </script>
+
+    <script>
+        /* ===== GestiRead wiring: backend + ISL + trainable sign recognition =====
+           Talks to the FastAPI backend (same server that serves this page). */
+        (() => {
+            const API = window.GESTIREAD_API_BASE ||
+                (location.protocol.startsWith("http") && location.port === "8000" ? location.origin : "http://localhost:8000");
+            const $ = (id) => document.getElementById(id);
+            const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+            const paint = (el, msg, isErr) => { if (el) { el.textContent = msg; el.style.color = isErr ? "#ff6b6b" : ""; } };
+            const setStatus = (m, e) => paint($("translationStatus"), m, e);
+            const setModel = (m, e) => paint($("modelStatus"), m, e);
+            const setLib = (m, e) => paint($("libStatus"), m, e);
+
+            async function api(path, opts) {
+                const r = await fetch(API + path, opts);
+                let d = null;
+                try { d = await r.json(); } catch (e) { /* not JSON */ }
+                if (!r.ok) {
+                    let msg = d && (d.detail || d.message);
+                    if (Array.isArray(msg)) msg = msg.map((x) => x.msg || JSON.stringify(x)).join("; ");
+                    const err = new Error(msg || ("Server error " + r.status));
+                    err.status = r.status;
+                    throw err;
+                }
+                return d;
+            }
+            const jpost = (p, body) => api(p, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+            const errText = (e) => (e instanceof TypeError ? "Cannot reach the backend at " + API + " - is it running?" : e.message);
+            const cameraRunning = () => typeof camera !== "undefined" && camera && camera.isRunning;
+
+            /* ---------- dataset collector (was undefined in the original page) ---------- */
+            const MAX_SAMPLES = 120;                       // ~4 s of a held sign, then auto-stop
+            window.collector = window.collector || new DatasetCollector();
+            const origAdd = collector.addSample.bind(collector);
+            let lastFrameAt = 0;
+            collector.addSample = (f, l) => {
+                origAdd(f, l);
+                lastFrameAt = Date.now();
+                onHandFrame(f);
+                if (collector.recording && collector.sampleCount >= MAX_SAMPLES) stopRecording();
+            };
+            $("startCollection").onclick = () => {
+                if (!cameraRunning()) { setModel("Start the camera first.", true); return; }
+                collector.start();
+                setModel('Recording "' + $("gestureLabel").value + '" - hold the sign steady...');
+            };
+            async function stopRecording() {
+                if (!collector.recording) return;
+                collector.stop();
+                const samples = collector.samples.slice();
+                if (!samples.length) { setModel("No hand was seen - nothing saved. Show your hand to the camera.", true); return; }
+                try {
+                    const st = await jpost("/api/gesture/samples", { samples });
+                    renderModel(st);
+                    const rec = Object.entries(st.samples || {}).map(([k, v]) => k + " " + v).join(", ");
+                    setModel("Saved " + samples.length + ' samples of "' + samples[0].label + '". Recorded so far: ' + rec + ". Add more signs, then press Train model.");
+                } catch (e) { setModel(errText(e), true); }
+            }
+            $("stopCollection").onclick = stopRecording;
+            $("downloadDataset").onclick = () => {
+                const blob = new Blob([JSON.stringify(collector.samples)], { type: "application/json" });
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = "gestiread_dataset.json";
+                a.click();
+            };
+
+            /* ---------- teach / train signs ---------- */
+            $("addSign").onclick = () => {
+                const n = $("newSignName").value.trim();
+                if (!n) return;
+                const sel = $("gestureLabel");
+                if (![...sel.options].some((o) => o.value === n)) {
+                    const o = document.createElement("option");
+                    o.textContent = n;
+                    sel.appendChild(o);
+                }
+                sel.value = n;
+                $("newSignName").value = "";
+                setModel('Selected "' + n + '". Press Start Recording and hold the sign steady.');
+            };
+            function renderModel(st) {
+                modelTrained = !!st.trained;
+                const rec = Object.entries(st.samples || {}).map(([k, v]) => k + " " + v).join(", ") || "none yet";
+                const sel = $("gestureLabel");
+                Object.keys(st.samples || {}).forEach((n) => {          // show previously taught signs in the dropdown
+                    if (![...sel.options].some((o) => o.value === n)) {
+                        const o = document.createElement("option"); o.textContent = n; sel.appendChild(o);
+                    }
+                });
+                paint($("modelStatus"), "Recorded samples: " + rec + " | Model: " + (st.trained ? "trained (" + st.labels.join(", ") + ")" : "not trained"));
+            }
+            const refreshModel = () => api("/api/gesture/status").then(renderModel).catch(() => {});
+            $("trainModel").onclick = async () => {
+                setModel("Training...");
+                try {
+                    const r = await jpost("/api/gesture/train", {});
+                    modelTrained = true;                 // use the trained signs straight away
+                    const acc = r.holdout_accuracy == null ? "" : " Held-out accuracy ~" + Math.round(r.holdout_accuracy * 100) + "% (optimistic - test it live).";
+                    setModel("Trained on " + r.labels.length + " signs: " + r.labels.join(", ") + "." + acc);
+                } catch (e) { setModel(errText(e), true); }
+            };
+            $("resetModel").onclick = async () => {
+                if (!confirm("Delete all recorded samples and the trained model?")) return;
+                try { renderModel(await jpost("/api/gesture/reset", { what: "all" })); setModel("Cleared."); } catch (e) { setModel(errText(e), true); }
+            };
+
+            /* ---------- live recognition: hand sign -> text -> speech ----------
+               1) your own trained signs (backend)  2) built-in starter gestures (works offline, no training) */
+            const STARTER = {            // edit the words on the right to change what is said
+                open: "Hello", thumbsUp: "Yes", fist: "Stop", love: "I love you",
+                one: "One", two: "Two", three: "Three", four: "Four"
+            };
+            const FINGER_EXT = 1.12;     // fingertip must be this much farther from the wrist than its middle joint
+            const THUMB_OUT = 0.5;       // thumb tip distance from index knuckle, as a fraction of palm length
+            function starterGesture(f) {
+                const P = (i) => [f[i * 3], f[i * 3 + 1]];
+                const d = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+                const w = P(0), palm = d(w, P(9));
+                if (palm < 1e-4) return null;
+                const ext = (tip, pip) => d(w, P(tip)) > d(w, P(pip)) * FINGER_EXT;
+                const I = ext(8, 6), M = ext(12, 10), R = ext(16, 14), K = ext(20, 18);
+                const T = d(P(4), P(5)) > palm * THUMB_OUT;
+                const n = [I, M, R, K].filter(Boolean).length;
+                if (n === 4) return T ? STARTER.open : STARTER.four;
+                if (n === 0) {
+                    if (T) return P(4)[1] < P(5)[1] - palm * 0.3 ? STARTER.thumbsUp : null;
+                    return STARTER.fist;
+                }
+                if (T && I && !M && !R && K) return STARTER.love;
+                if (T) return null;                                   // thumb out + some fingers: ambiguous
+                if (I && !M && !R && !K) return STARTER.one;
+                if (I && M && !R && !K) return STARTER.two;
+                if (I && M && R && !K) return STARTER.three;
+                return null;
+            }
+            window.starterGesture = starterGesture;
+
+            let modelTrained = false, inflight = false, lastSent = 0, lastCommitted = null, overlayTimer = null;
+            const win = [];
+            const idleText = () => cameraRunning() ? "Show a hand sign to the camera" : "Press Start Camera, then show a hand sign";
+            $("liveSign").textContent = idleText();
+            function onHandFrame(f) {
+                if (!$("liveRecog").checked || collector.recording) return;
+                const now = Date.now();
+                if (inflight || now - lastSent < 120) return;
+                lastSent = now;
+                const starter = $("starterGestures").checked ? starterGesture(f) : null;
+                const viaStarter = () => starter ? { recognized: true, prediction: starter, confidence: 1, source: "starter" } : { recognized: false };
+                if (!modelTrained) { handlePrediction(viaStarter()); return; }
+                inflight = true;
+                jpost("/api/predict-gesture", { features: f })
+                    .then((res) => handlePrediction(res.recognized ? res : viaStarter()))
+                    .catch((e) => { if (e.status === 501) modelTrained = false; handlePrediction(viaStarter()); })
+                    .finally(() => { inflight = false; });
+            }
+            function handlePrediction(res) {
+                const lab = res.recognized ? res.prediction : null;
+                win.push(lab); if (win.length > 7) win.shift();
+                const counts = {};
+                win.forEach((l) => { if (l) counts[l] = (counts[l] || 0) + 1; });
+                const best = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0];
+                $("liveSign").textContent = lab ? lab + (res.source === "starter" ? "  (starter gesture)" : "  (" + Math.round(res.confidence * 100) + "%)") : "Looking for a sign...";
+                if (best && counts[best] >= 5 && best !== lastCommitted) commit(best);
+            }
+            function commit(label) {
+                lastCommitted = label;
+                const ta = $("translation");
+                ta.value = (ta.value.trim() + " " + label).trim();
+                const ov = $("liveOverlay");
+                ov.textContent = label; ov.classList.add("show");
+                clearTimeout(overlayTimer); overlayTimer = setTimeout(() => ov.classList.remove("show"), 1800);
+                if ($("autoSpeak").checked && window.speechSynthesis) {
+                    speechSynthesis.cancel();
+                    speechSynthesis.speak(new SpeechSynthesisUtterance(label));
+                }
+            }
+            setInterval(() => {                             // hand left the frame -> allow the same sign again
+                if (Date.now() - lastFrameAt > 900) {
+                    win.length = 0; lastCommitted = null;
+                    if (!inflight) $("liveSign").textContent = idleText();
+                }
+            }, 300);
+            $("clearText").onclick = () => { $("translation").value = ""; $("glossLine").textContent = ""; };
+            $("clearLive").onclick = $("clearText").onclick;
+            $("speakLive").onclick = () => $("speak").click();
+
+            /* ---------- text -> ISL signs (clip if recorded, placeholder letters otherwise) ---------- */
+            let playToken = 0;
+            async function playItems(items) {
+                const token = ++playToken;
+                const box = $("signPlayer"), vid = $("signVideo"), img = $("signImg"), cap = $("signCaption");
+                if (!items || !items.length) { box.style.display = "none"; return; }
+                box.style.display = "block";
+                for (const it of items) {
+                    if (token !== playToken) return;
+                    if (it.type === "clip") {
+                        img.style.display = "none"; vid.style.display = "inline-block";
+                        cap.textContent = it.gloss;
+                        await new Promise((res) => {
+                            let t;
+                            const done = () => { clearTimeout(t); vid.onended = null; vid.onerror = null; res(); };
+                            vid.onended = done; vid.onerror = done;
+                            t = setTimeout(done, 12000);
+                            vid.src = API + it.url;
+                            vid.play().catch(done);
+                        });
+                    } else {
+                        vid.pause(); vid.style.display = "none";
+                        if (!it.letters || !it.letters.length) { img.style.display = "none"; cap.textContent = it.gloss + " (no clip yet)"; await sleep(900); continue; }
+                        img.style.display = "inline-block";
+                        for (const l of it.letters) {
+                            if (token !== playToken) return;
+                            img.src = API + l.url;
+                            cap.textContent = it.gloss + " - " + l.token.toUpperCase() + " (placeholder ASL letters: no ISL clip recorded yet)";
+                            await sleep(700);
+                        }
+                    }
+                    await sleep(250);
+                }
+            }
+            function showResult(d) {
+                window.lastItems = d.items;
+                $("glossLine").textContent = "ISL gloss: " + d.gloss.join(" ");
+                const missing = d.items.filter((i) => i.type !== "clip").length;
+                setStatus(d.items.length + " signs" + (missing ? ", " + missing + " without a recorded ISL clip (record them in the ISL clip library)" : ""));
+                playItems(d.items);
+            }
+            async function textToSigns(text) {
+                text = (text || "").trim();
+                if (!text) { setStatus("Type or speak some text first.", true); return; }
+                setStatus("Converting to ISL...");
+                try { showResult(await jpost("/api/text-to-isl", { text })); } catch (e) { setStatus(errText(e), true); }
+            }
+            $("showSigns").onclick = () => textToSigns($("translation").value);
+            $("replaySigns").onclick = () => window.lastItems && playItems(window.lastItems);
+
+            /* ---------- speech -> text -> ISL (browser speech recognition: Chrome / Edge, needs internet) ---------- */
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            $("micSign").onclick = () => {
+                if (!SR) { setStatus("Speech recognition needs Chrome or Edge.", true); return; }
+                const rec = new SR();
+                rec.lang = "en-IN"; rec.interimResults = false;
+                rec.onstart = () => setStatus("Listening - speak now...");
+                rec.onerror = (e) => setStatus("Microphone problem: " + e.error, true);
+                rec.onresult = (e) => { const t = e.results[0][0].transcript; $("translation").value = t; textToSigns(t); };
+                rec.start();
+            };
+
+            /* ---------- document upload -> OCR -> simplify -> ISL ---------- */
+            const fileInput = $("fileUpload");
+            fileInput.accept = "image/*,application/pdf";
+            fileInput.addEventListener("change", async () => {
+                const f = fileInput.files[0];
+                if (!f) return;
+                setStatus("Reading document...");
+                const fd = new FormData();
+                fd.append("file", f);
+                try {
+                    const d = await api("/api/document-to-sign", { method: "POST", body: fd });
+                    $("translation").value = d.simplified;
+                    showResult(d);
+                } catch (e) { setStatus(errText(e), true); }
+                finally { fileInput.value = ""; }
+            });
+
+            /* ---------- record ISL clips for the library ---------- */
+            let recorder = null, chunks = [], recTimer = null;
+            const renderLib = (clips) => paint($("libStatus"), clips.length ? "ISL clips saved (" + clips.length + "): " + clips.join(", ") : "No ISL clips saved yet.");
+            const refreshLib = () => api("/api/isl/library").then((d) => renderLib(d.clips)).catch(() => {});
+            function stopClip() { clearTimeout(recTimer); if (recorder && recorder.state !== "inactive") recorder.stop(); }
+            $("recClip").onclick = () => {
+                if (recorder) { stopClip(); return; }
+                const word = $("clipWord").value.trim();
+                if (!word) { setLib("Type the word for this sign first.", true); return; }
+                const stream = $("video") && $("video").srcObject;
+                if (!stream) { setLib("Start the camera first.", true); return; }
+                const mime = ["video/webm;codecs=vp9", "video/webm;codecs=vp8", "video/webm", "video/mp4"]
+                    .find((m) => window.MediaRecorder && MediaRecorder.isTypeSupported(m));
+                if (!mime) { setLib("This browser cannot record video.", true); return; }
+                chunks = [];
+                recorder = new MediaRecorder(stream, { mimeType: mime });
+                recorder.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+                recorder.onstop = () => uploadClip(word, mime);
+                recorder.start();
+                $("recClip").textContent = "Stop & save";
+                setLib('Recording "' + word + '" - do the ISL sign, then press Stop (auto-stops after 6 s).');
+                recTimer = setTimeout(stopClip, 6000);
+            };
+            async function uploadClip(word, mime) {
+                recorder = null;
+                $("recClip").textContent = "Record clip";
+                const blob = new Blob(chunks, { type: mime.split(";")[0] });
+                const fd = new FormData();
+                fd.append("gloss", word);
+                fd.append("file", blob, "clip." + (mime.includes("mp4") ? "mp4" : "webm"));
+                try {
+                    const d = await api("/api/isl/clip", { method: "POST", body: fd });
+                    renderLib(d.clips);
+                    setLib('Saved the clip for "' + word + '". ' + $("libStatus").textContent);
+                    playItems([{ gloss: word.toUpperCase(), type: "clip", url: "/api/isl/clip/" + d.saved }]);
+                } catch (e) { setLib(errText(e), true); }
+            }
+
+            /* ---------- status cards (order: Camera, OCR, Speech, AI Model) ---------- */
+            const spans = document.querySelectorAll(".status-card span");
+            api("/api/health").then((h) => {
+                if (spans[1]) spans[1].textContent = h.ocr ? "READY" : "NOT INSTALLED";
+                if (spans[2]) spans[2].textContent = h.tts ? "READY" : "UNAVAILABLE";
+                if (spans[3]) spans[3].textContent = h.gesture_model === "trained" ? "TRAINED" : "NOT TRAINED";
+            }).catch(() => { [1, 2, 3].forEach((i) => { if (spans[i]) spans[i].textContent = "BACKEND OFFLINE"; }); });
+            refreshModel(); refreshLib();
+
+            /* ---------- Speak: backend gTTS, browser voice as fallback ---------- */
+            let audio = null;
+            $("speak").onclick = async () => {
+                const text = $("translation").value.trim();
+                if (!text) return;
+                speechSynthesis.cancel();
+                if (audio) { audio.pause(); audio = null; }
+                try {
+                    const ctrl = new AbortController();
+                    const t = setTimeout(() => ctrl.abort(), 5000);
+                    const r = await fetch(API + "/api/tts", {
+                        method: "POST", headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ text }), signal: ctrl.signal
+                    });
+                    clearTimeout(t);
+                    if (!r.ok) throw new Error("tts " + r.status);
+                    audio = new Audio(URL.createObjectURL(await r.blob()));
+                    await audio.play();
+                } catch (e) {
+                    speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+                    setStatus("Backend speech unavailable - used browser voice");
+                }
+            };
+        })();
+    </script>
+
+</body>
+
+</html>
